@@ -141,6 +141,12 @@ body {
   }
 }
 
+/* PWA install progress bar */
+@keyframes progress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

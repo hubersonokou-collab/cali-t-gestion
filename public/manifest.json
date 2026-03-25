@@ -2,31 +2,63 @@
   "name": "Cali-T - Energie Naturelle Locale",
   "short_name": "Cali-T",
   "description": "Jus naturels energisants 100% Bio. Commandez en ligne !",
-  "start_url": "/",
+  "start_url": "/fr",
+  "scope": "/",
+  "id": "/",
   "display": "standalone",
   "background_color": "#FAF8F5",
   "theme_color": "#2D7D3A",
   "orientation": "portrait",
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/icons/icon-384x384.png",
       "sizes": "384x384",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
-  "categories": ["food", "shopping"],
+  "screenshots": [
+    {
+      "src": "/images/hero-products.jpeg",
+      "sizes": "750x666",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Gamme de jus Cali-T 100% Bio"
+    },
+    {
+      "src": "/images/product-1l.jpeg",
+      "sizes": "960x960",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Cali-T Nature Delice 1L"
+    }
+  ],
+  "categories": ["food", "shopping", "health"],
   "lang": "fr",
   "dir": "ltr"
 }

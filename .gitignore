@@ -39,7 +39,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# PWA
-public/sw.js
+# PWA (auto-generated workers only)
 public/workbox-*.js
 public/swe-worker-*.js
+
+.vercel
