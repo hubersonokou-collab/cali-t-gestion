@@ -24,21 +24,136 @@
   --animate-float: float 3s ease-in-out infinite;
   --animate-bounce-subtle: bounce-subtle 0.6s ease-in-out;
   --animate-slide-in-left: slide-in-left 0.6s ease-out both;
-  --animate-slide-in-right: slide-in-right 0.6s ease-out both;
+  --animate-slide-in-right: slide-in-right 0.3s ease-out both;
   --animate-pulse-slow: pulse-slow 3s ease-in-out infinite;
 }
 
+/* ═══ Base: mobile-first ═══ */
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
   font-family: var(--font-sans);
   background-color: var(--color-off-white);
   color: #1a1a1a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Animations */
+/* ═══ PWA: Native feel ═══ */
+
+/* Prevent text selection on UI elements */
+button, a, nav, header, footer, [role="button"] {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Allow text selection in content areas */
+p, span, h1, h2, h3, h4, h5, h6, article, section, td, th, li, label, textarea, input {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Remove tap highlight on mobile */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Smooth touch scrolling */
+main, .overflow-y-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Active press states for interactive elements */
+button:active, [role="button"]:active {
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
+}
+
+/* Navbar links - subtle active state */
+nav a:active {
+  transform: scale(0.95);
+  transition: transform 0.1s ease;
+}
+
+/* Safe area padding for notched devices */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 0);
+}
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+.safe-area-left {
+  padding-left: env(safe-area-inset-left, 0);
+}
+.safe-area-right {
+  padding-right: env(safe-area-inset-right, 0);
+}
+
+/* Standalone mode adjustments */
+@media (display-mode: standalone) {
+  body {
+    /* Extra top padding for status bar in standalone */
+    padding-top: env(safe-area-inset-top, 0);
+  }
+  header {
+    padding-top: env(safe-area-inset-top, 0);
+  }
+}
+
+/* Prevent pull-to-refresh on Android standalone */
+@media (display-mode: standalone) {
+  html {
+    overscroll-behavior-y: contain;
+  }
+}
+
+/* ═══ Page transitions ═══ */
+main {
+  animation: page-enter 0.3s ease-out;
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0.8;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ═══ Network status banner ═══ */
+.offline-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9998;
+  background: #C41E3A;
+  color: white;
+  text-align: center;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+}
+.offline-banner.visible {
+  transform: translateY(0);
+}
+
+@media (display-mode: standalone) {
+  .offline-banner {
+    padding-top: calc(6px + env(safe-area-inset-top, 0));
+  }
+}
+
+/* ═══ Animations ═══ */
 @keyframes fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -101,7 +216,7 @@ body {
 @keyframes slide-in-right {
   from {
     opacity: 0;
-    transform: translateX(30px);
+    transform: translateX(100%);
   }
   to {
     opacity: 1;
@@ -115,18 +230,10 @@ body {
 }
 
 /* Animation delays */
-.animation-delay-200 {
-  animation-delay: 200ms;
-}
-.animation-delay-400 {
-  animation-delay: 400ms;
-}
-.animation-delay-600 {
-  animation-delay: 600ms;
-}
-.animation-delay-800 {
-  animation-delay: 800ms;
-}
+.animation-delay-200 { animation-delay: 200ms; }
+.animation-delay-400 { animation-delay: 400ms; }
+.animation-delay-600 { animation-delay: 600ms; }
+.animation-delay-800 { animation-delay: 800ms; }
 
 /* Scroll-triggered animations */
 @media (prefers-reduced-motion: no-preference) {
@@ -141,23 +248,67 @@ body {
   }
 }
 
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  main {
+    animation: none;
+  }
+}
+
 /* PWA install progress bar */
 @keyframes progress {
   from { width: 0%; }
   to { width: 100%; }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+/* ═══ Custom scrollbar (desktop) ═══ */
+@media (min-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-off-white);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-nature-green-light);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-nature-green);
+  }
 }
-::-webkit-scrollbar-track {
-  background: var(--color-off-white);
+
+/* ═══ Mobile touch: larger tap targets ═══ */
+@media (max-width: 768px) {
+  /* Ensure minimum 44px touch targets */
+  button, a, input, select, textarea {
+    min-height: 44px;
+  }
+
+  /* Except inline text links */
+  p a, span a, li a {
+    min-height: auto;
+  }
 }
-::-webkit-scrollbar-thumb {
-  background: var(--color-nature-green-light);
+
+/* ═══ Image loading optimization ═══ */
+img {
+  content-visibility: auto;
+}
+
+/* ═══ Focus visible for accessibility ═══ */
+:focus-visible {
+  outline: 2px solid var(--color-nature-green);
+  outline-offset: 2px;
   border-radius: 4px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-nature-green);
+
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible) {
+  outline: none;
 }

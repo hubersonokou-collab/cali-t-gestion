@@ -2,60 +2,175 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2D7D3A">
   <title>Cali-T - Hors ligne</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: system-ui, -apple-system, sans-serif;
-      background: #FAF8F5;
+      background: linear-gradient(135deg, #FAF8F5 0%, #F5F0EB 100%);
       color: #1a1a1a;
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
+      min-height: 100dvh;
       padding: 20px;
+      padding-top: calc(20px + env(safe-area-inset-top, 0));
+      padding-bottom: calc(20px + env(safe-area-inset-bottom, 0));
     }
     .container {
       text-align: center;
-      max-width: 400px;
+      max-width: 360px;
+      animation: fadeUp 0.6s ease-out;
     }
     .logo {
       width: 80px;
       height: 80px;
-      background: #2D7D3A;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      border-radius: 20px;
       margin: 0 auto 24px;
-      font-size: 36px;
-      font-weight: bold;
-      color: white;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(45,125,58,0.15);
     }
-    h1 { color: #2D7D3A; font-size: 24px; margin-bottom: 12px; }
-    p { color: #666; font-size: 16px; line-height: 1.5; margin-bottom: 24px; }
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .wifi-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 16px;
+      color: #D4A017;
+    }
+    h1 {
+      color: #1B5E27;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    p {
+      color: #666;
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
     .btn {
-      display: inline-block;
-      padding: 12px 32px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
       background: #2D7D3A;
       color: white;
       text-decoration: none;
-      border-radius: 12px;
+      border-radius: 14px;
       font-weight: 600;
       border: none;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 15px;
+      transition: background 0.2s, transform 0.1s;
+      -webkit-tap-highlight-color: transparent;
     }
     .btn:hover { background: #1B5E27; }
+    .btn:active { transform: scale(0.96); }
+    .btn:disabled {
+      background: #4A9A56;
+      cursor: not-allowed;
+    }
+    .status {
+      margin-top: 16px;
+      font-size: 13px;
+      color: #999;
+      min-height: 20px;
+      transition: color 0.3s;
+    }
+    .status.online {
+      color: #2D7D3A;
+      font-weight: 600;
+    }
+    .hint {
+      margin-top: 20px;
+      font-size: 13px;
+      color: #999;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .spinning svg {
+      animation: spin 1s linear infinite;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="logo">C</div>
-    <h1>Vous etes hors ligne</h1>
-    <p>Verifiez votre connexion internet et reessayez. Vos articles du panier sont sauvegardes.</p>
-    <button class="btn" onclick="window.location.reload()">Reessayer</button>
+    <div class="logo">
+      <img src="/images/logo.jpeg" alt="Cali-T" onerror="this.parentElement.innerHTML='<div style=&quot;width:100%;height:100%;background:#2D7D3A;display:flex;align-items:center;justify-content:center;color:white;font-size:36px;font-weight:bold&quot;>C</div>'">
+    </div>
+    <svg class="wifi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="1" y1="1" x2="23" y2="23"></line>
+      <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+      <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+      <path d="M10.71 5.05A16 16 0 0 1 22.56 9"></path>
+      <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+      <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+      <line x1="12" y1="20" x2="12.01" y2="20"></line>
+    </svg>
+    <h1>Vous &#234;tes hors ligne</h1>
+    <p>V&#233;rifiez votre connexion internet et r&#233;essayez.<br>Vos articles du panier sont sauvegard&#233;s.</p>
+    <button class="btn" id="retryBtn" onclick="handleRetry()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 4 23 10 17 10"></polyline>
+        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+      </svg>
+      R&#233;essayer
+    </button>
+    <p class="status" id="status"></p>
   </div>
+
+  <script>
+    var statusEl = document.getElementById('status');
+    var retryBtn = document.getElementById('retryBtn');
+
+    function handleRetry() {
+      retryBtn.disabled = true;
+      retryBtn.classList.add('spinning');
+      statusEl.textContent = 'V\u00e9rification de la connexion...';
+      statusEl.className = 'status';
+
+      fetch('/manifest.json', { cache: 'no-store' })
+        .then(function(r) {
+          if (r.ok) {
+            statusEl.textContent = 'Connexion r\u00e9tablie ! Rechargement...';
+            statusEl.className = 'status online';
+            setTimeout(function() { window.location.reload(); }, 500);
+          } else {
+            showOffline();
+          }
+        })
+        .catch(function() {
+          showOffline();
+        });
+    }
+
+    function showOffline() {
+      retryBtn.disabled = false;
+      retryBtn.classList.remove('spinning');
+      statusEl.textContent = 'Toujours hors ligne. R\u00e9essayez plus tard.';
+      statusEl.className = 'status';
+    }
+
+    // Auto-detect when connection comes back
+    window.addEventListener('online', function() {
+      statusEl.textContent = 'Connexion d\u00e9tect\u00e9e ! Rechargement...';
+      statusEl.className = 'status online';
+      setTimeout(function() { window.location.reload(); }, 1000);
+    });
+  </script>
 </body>
 </html>
